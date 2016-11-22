@@ -5,7 +5,6 @@ public class Application {
 	private static ScreenshotSaver saver;
 
 	public static void main(String[] args) {
-
 		// test dir
 		List<String> siteList = new ArrayList<>();
 		siteList.add("http://fs.to/");

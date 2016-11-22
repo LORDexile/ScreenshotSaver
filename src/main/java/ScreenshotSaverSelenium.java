@@ -29,16 +29,18 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
 	private void takeScreenshot(WebDriver driver, String site) {
 		try {
-			System.out.println("0");
+
+			System.out.println("Loading site:[" + site + "]...");
 			driver.get(site);
 
-			System.out.println("1");
+			System.out.println("ScreenShot creating...");
 			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
-			System.out.println("2");
-			String path = outputFileDir + screenshot.getName() + ".png";
+			System.out.println("Loading ScreenShot to file dir...");
+			String path = outputFileDir + screenshot.getName();
 
 			FileUtils.copyFile(screenshot, new File(path));
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -47,16 +49,26 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 	public void start(List<String> siteList) {
 
 		WebDriver driver = null;
+		// path to chrome driver
 		ChromeDriverService driverService = new ChromeDriverService.Builder().usingDriverExecutable(new File(outputFileDir + "chromedriver.exe")).build();
 
 		try {
 
-			System.out.println("Start");
+			System.out.println("Start operation");
+
+			// Loading chrome driver
 			driver = new ChromeDriver(driverService);
+			// set window full screen
+			driver.manage().window().maximize();
 
 			for (String site : siteList) {
+
+				System.out.println("_______________________________");
+
 				takeScreenshot(driver, site);
-				System.out.println("ScreenShot done [" + site + ".png]");
+
+				System.out.println("Operation anded.");
+				System.out.println("___________________________");
 			}
 
 		} catch (Exception e) {
