@@ -6,6 +6,8 @@ public interface SiteParser {
 
 	public void parse();
 
+	public void clear();
+
 	public List<String> getTargetSiteList();
 
 	public void setRegex(String regex);
