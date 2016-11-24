@@ -32,7 +32,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 			return;
 		}
 
-		System.out.println("Start parsing... [Option = All YEARS{2006 - " + currentYear + "}]");
+		System.out.println("Start parsing " + targetSite + "... [Option = All YEARS{2006 - " + currentYear + "}]");
 
 		for (int i = 2006; i <= currentYear; i++) {
 			parse(i);
@@ -49,7 +49,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 			return;
 		}
 
-		System.out.println("Start parsing... [Option = " + year + " YEAR]");
+		System.out.println("Start parsing " + targetSite + "... [Option = " + year + " YEAR]");
 
 		if (year == currentYear) {
 			parseLastYear();
@@ -61,7 +61,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
 	// parse target site by last year(different page).
 	private void parseLastYear() {
-		System.out.println("Start parsing... [Option = LAST{" + currentYear + "} YEAR]");
+		System.out.println("Start parsing " + targetSite + "... [Option = LAST{" + currentYear + "} YEAR]");
 
 		parse(lastYearPrefix + targetSite);
 	}
@@ -80,7 +80,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
 			for (Element link : links) {
 
-				map.put(link.attr("href"), "");
+				map.put(link.attr("href"), targetSite);
 			}
 
 		} catch (Exception e) {
