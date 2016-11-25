@@ -1,3 +1,4 @@
+package logic;
 
 public interface SiteParserExtend extends SiteParser {
 
