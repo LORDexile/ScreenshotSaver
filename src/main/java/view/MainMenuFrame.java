@@ -57,6 +57,7 @@ public class MainMenuFrame extends JFrame {
 		mainPanel.add(labelPathDriver);
 
 		driverTextField = new JTextField();
+		driverTextField.setEditable(false);
 		driverTextField.setBounds(10, 37, 354, 20);
 		mainPanel.add(driverTextField);
 		driverTextField.setColumns(10);
@@ -70,6 +71,7 @@ public class MainMenuFrame extends JFrame {
 		mainPanel.add(labelImportFile);
 
 		importFileTextField = new JTextField();
+		importFileTextField.setEditable(false);
 		importFileTextField.setBounds(10, 93, 354, 20);
 		mainPanel.add(importFileTextField);
 		importFileTextField.setColumns(10);
@@ -83,6 +85,7 @@ public class MainMenuFrame extends JFrame {
 		mainPanel.add(labelExport);
 
 		exportFolderTextField = new JTextField();
+		exportFolderTextField.setEditable(false);
 		exportFolderTextField.setBounds(10, 149, 354, 20);
 		mainPanel.add(exportFolderTextField);
 		exportFolderTextField.setColumns(10);
@@ -92,7 +95,6 @@ public class MainMenuFrame extends JFrame {
 		mainPanel.add(exportFolderPathButton);
 
 		loadSiteListButton = new JButton("Load site list");
-		loadSiteListButton.setEnabled(false);
 		loadSiteListButton.setBounds(374, 181, 100, 20);
 		mainPanel.add(loadSiteListButton);
 
@@ -106,7 +108,7 @@ public class MainMenuFrame extends JFrame {
 		screenshotsSaveButton.setBounds(374, 243, 100, 20);
 		mainPanel.add(screenshotsSaveButton);
 
-		loadingLabel = new JLabel("Loading success:");
+		loadingLabel = new JLabel("Loading:");
 		loadingLabel.setBounds(10, 180, 354, 14);
 		mainPanel.add(loadingLabel);
 
