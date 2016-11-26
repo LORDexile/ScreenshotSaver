@@ -1,14 +1,13 @@
 package logic;
+
 import java.io.File;
 import java.io.IOException;
-
-import javax.swing.filechooser.FileSystemView;
 
 import org.apache.commons.io.FileUtils;
 
 public class FolderFileSaver implements FileSaver {
-	// TODO use property
-	private String homeDirPath = getHomeDir().toString() + "\\1\\";
+
+	private String homeDirPath;
 	// save directory
 	private String targetDir;
 
@@ -16,7 +15,7 @@ public class FolderFileSaver implements FileSaver {
 	}
 
 	public FolderFileSaver(String homeDirPath) {
-		this.homeDirPath = homeDirPath;
+		this.homeDirPath = homeDirPath + "\\";
 	}
 
 	/**
@@ -74,8 +73,4 @@ public class FolderFileSaver implements FileSaver {
 		return siteName;
 	}
 
-	private File getHomeDir() {
-		FileSystemView fsv = FileSystemView.getFileSystemView();
-		return fsv.getHomeDirectory();
-	}
 }

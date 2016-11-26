@@ -3,8 +3,6 @@ package logic;
 import java.io.File;
 import java.util.List;
 
-import javax.swing.filechooser.FileSystemView;
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -14,19 +12,20 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
 	// TODO load from property
-	private String driverPath = getHomeDir().toString() + "\\1\\";
+	private String driverPath;
 	// load fileSaver
-	private FileSaver fileSaver = new FolderFileSaver();
+	private FileSaver fileSaver;
 
-	public ScreenshotSaverSelenium() {
-
+	public ScreenshotSaverSelenium(String driverPath, String saveDirPath) {
+		this.driverPath = driverPath;
+		fileSaver = new FolderFileSaver(saveDirPath);
 	}
 
 	public void start(List<String> siteList) {
 
 		WebDriver driver = null;
 		// path to chrome driver
-		ChromeDriverService driverService = new ChromeDriverService.Builder().usingDriverExecutable(new File(driverPath + "chromedriver.exe")).build();
+		ChromeDriverService driverService = new ChromeDriverService.Builder().usingDriverExecutable(new File(driverPath)).build();
 
 		try {
 
@@ -37,12 +36,9 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 			// set window full screen
 			driver.manage().window().maximize();
 
-			fileSaver.createDir(siteList.get(0));
-
 			for (String site : siteList) {
 
 				System.out.println("_______________________________");
-				System.out.println("Creating directory...");
 
 				takeScreenshot(driver, fileSaver, site);
 
@@ -63,7 +59,11 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 		try {
 
 			System.out.println("Loading site:[" + site + "]...");
+
 			driver.get(site);
+
+			System.out.println("Creating directory...");
+			fileSaver.createDir(site);
 
 			System.out.println("ScreenShot creating...");
 			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
@@ -78,11 +78,6 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private File getHomeDir() {
-		FileSystemView fsv = FileSystemView.getFileSystemView();
-		return fsv.getHomeDirectory();
 	}
 
 }
