@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -41,6 +42,8 @@ public class MainMenuController {
 	private JLabel loadingLabel;
 	private JLabel websitesLabel;
 	private JLabel nodesLabel;
+
+	JProgressBar progressBar;
 
 	private List<String> websiteList = null;
 	private Map<String, ArrayList<String>> parseMap = null;
@@ -74,6 +77,8 @@ public class MainMenuController {
 		loadingLabel = mainMenu.getLoadingLabel();
 		websitesLabel = mainMenu.getWebsitesLabel();
 		nodesLabel = mainMenu.getNodesLabel();
+
+		progressBar = mainMenu.getProgressBar();
 
 	}
 
@@ -146,6 +151,10 @@ public class MainMenuController {
 		nodesLabel.setText("0");
 		importFileTextField.setText("");
 
+	}
+
+	public JProgressBar getProgressBar() {
+		return progressBar;
 	}
 
 	private class driverPathButtonActionListener implements ActionListener {
