@@ -23,17 +23,16 @@ public class FolderFileSaver implements FileSaver {
 	 */
 	public void createDir(String dirName) {
 
-		String dir = nameFilter(dirName);
 		try {
 
-			File file = new File(homeDirPath + dir);
+			File file = new File(homeDirPath + dirName);
 			file.mkdir();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		targetDir = homeDirPath + dir + "\\";
+		targetDir = homeDirPath + dirName + "\\";
 
 	}
 
@@ -49,28 +48,6 @@ public class FolderFileSaver implements FileSaver {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * doing correct name fore folder
-	 * 
-	 * @param siteName
-	 * @return correct NameFolder
-	 */
-	private String nameFilter(String siteName) {
-
-		char[] characters = siteName.toCharArray();
-		String str = "";
-
-		for (int i = characters.length - 2; i > 0; i--) {
-
-			if (characters[i] == '/') {
-				return str;
-			}
-			str = characters[i] + str;
-		}
-
-		return siteName;
 	}
 
 }

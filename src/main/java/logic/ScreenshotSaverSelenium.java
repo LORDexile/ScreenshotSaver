@@ -1,10 +1,13 @@
 package logic;
 
 import java.io.File;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeDriverService;
@@ -21,7 +24,7 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 		fileSaver = new FolderFileSaver(saveDirPath);
 	}
 
-	public void start(List<String> siteList) {
+	public void start(Map<String, ArrayList<String>> siteMap) {
 
 		WebDriver driver = null;
 		// path to chrome driver
@@ -35,15 +38,29 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 			driver = new ChromeDriver(driverService);
 			// set window full screen
 			driver.manage().window().maximize();
+			// Set timeout for loading page (15 second)
+			driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
 
-			for (String site : siteList) {
+			// for (String site : siteList) {
+			for (Map.Entry<String, ArrayList<String>> item : siteMap.entrySet()) {
 
-				System.out.println("_______________________________");
+				for (String site : item.getValue()) {
+					System.out.println("_______________________________");
+					System.out.println("Loading site:[" + site + "]...");
 
-				takeScreenshot(driver, fileSaver, site);
+					// loading site
+					try {
+						driver.get(site);
+					} catch (TimeoutException e) {
+						System.out.println("loading brack! timeout > 10sec");
+					}
 
-				System.out.println("Operation anded.");
-				System.out.println("___________________________");
+					// take & save screenshot
+					takeScreenshot(driver, fileSaver, item.getKey());
+
+					System.out.println("Operation ended.");
+					System.out.println("___________________________");
+				}
 			}
 
 		} catch (Exception e) {
@@ -55,28 +72,21 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 		}
 	}
 
-	private void takeScreenshot(WebDriver driver, FileSaver fileSaver, String site) {
+	private void takeScreenshot(WebDriver driver, FileSaver fileSaver, String siteName) {
 		try {
 
-			System.out.println("Loading site:[" + site + "]...");
+			// Creating directory
+			fileSaver.createDir(siteName);
 
-			driver.get(site);
-
-			System.out.println("Creating directory...");
-			fileSaver.createDir(site);
-
-			System.out.println("ScreenShot creating...");
+			// ScreenShot creating
 			File screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
-			System.out.println("Loading ScreenShot to file dir...");
-
-			// String path = driverPath + screenshot.getName();
-			// FileUtils.copyFile(screenshot, new File(path));
-
+			// screenshot saving
 			fileSaver.save(screenshot, screenshot.getName());
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("error! site: [" + driver.getCurrentUrl() + "]");
 		}
 	}
 

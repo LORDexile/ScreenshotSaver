@@ -1,6 +1,8 @@
 package logic;
-import java.util.List;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public interface ScreenshotSaver {
-	public void start(List<String> siteList);
+	public void start(Map<String, ArrayList<String>> siteMap);
 }
