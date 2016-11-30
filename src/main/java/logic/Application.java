@@ -9,6 +9,8 @@ public class Application {
 		MainMenuController controller = new MainMenuController();
 		controller.showManeMenu();
 
+		// TesterClass test = new TesterClass();
+		// test.start();
 	}
 
 }
