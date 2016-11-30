@@ -3,8 +3,10 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,9 +19,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import logic.ArchiveOrgSiteParser;
 import logic.CSVFileParser;
 import logic.FileParser;
+import logic.PropetiesWorker;
 import logic.ScreenshotSaver;
 import logic.ScreenshotSaverSelenium;
 import logic.SiteParserExtend;
+import resources.Constants;
 import view.MainMenuFrame;
 
 public class MainMenuController {
@@ -54,6 +58,7 @@ public class MainMenuController {
 	}
 
 	public void showManeMenu() {
+		updateInfo();
 		mainMenu.setVisible(true);
 	}
 
@@ -153,6 +158,58 @@ public class MainMenuController {
 
 	}
 
+	private void updateInfo() {
+		PropetiesWorker propetiesWorker = new PropetiesWorker();
+		Properties properties = propetiesWorker.readProperties(Constants.CONFIG_PATH);
+
+		driverTextField.setText(properties.getProperty("driver.path"));
+		exportFolderTextField.setText(properties.getProperty("exportFolder.path"));
+
+	}
+
+	private void setDriverPath() {
+		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("driver.exe", "exe");
+
+		fileChooser.setFileFilter(filter);
+
+		int answer = fileChooser.showDialog(null, "Choose");
+
+		if (answer == JFileChooser.APPROVE_OPTION) {
+
+			PropetiesWorker propetiesWorker = new PropetiesWorker();
+
+			Map<String, String> propertiesMap = new HashMap<>();
+			propertiesMap.put("driver.path", fileChooser.getSelectedFile().getAbsolutePath());
+
+			propetiesWorker.changePropeties(propertiesMap);
+
+			updateInfo();
+		}
+	}
+
+	private void setExportFilePath() {
+		JFileChooser fileChooser = new JFileChooser();
+
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+
+		int answer = fileChooser.showDialog(null, "Choose");
+
+		if (answer == JFileChooser.APPROVE_OPTION) {
+
+			PropetiesWorker propetiesWorker = new PropetiesWorker();
+
+			Map<String, String> propertiesMap = new HashMap<>();
+			propertiesMap.put("exportFolder.path", fileChooser.getSelectedFile().getAbsolutePath());
+
+			propetiesWorker.changePropeties(propertiesMap);
+
+			updateInfo();
+
+		}
+	}
+
 	public JProgressBar getProgressBar() {
 		return progressBar;
 	}
@@ -161,18 +218,8 @@ public class MainMenuController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser();
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("driver.exe", "exe");
 
-			fileChooser.setFileFilter(filter);
-
-			int answer = fileChooser.showDialog(null, "Choose");
-
-			if (answer == JFileChooser.APPROVE_OPTION) {
-
-				driverTextField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-
-			}
+			setDriverPath();
 
 		}
 	}
@@ -201,18 +248,8 @@ public class MainMenuController {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser();
 
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			fileChooser.setAcceptAllFileFilterUsed(false);
-
-			int answer = fileChooser.showDialog(null, "Choose");
-
-			if (answer == JFileChooser.APPROVE_OPTION) {
-
-				exportFolderTextField.setText(fileChooser.getSelectedFile().getAbsolutePath());
-
-			}
+			setExportFilePath();
 
 		}
 	}
