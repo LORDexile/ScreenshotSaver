@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -41,8 +42,8 @@ public class MainMenuController {
 	private JLabel websitesLabel;
 	private JLabel nodesLabel;
 
-	List<String> websiteList = null;
-	List<String> parseList = null;
+	private List<String> websiteList = null;
+	private Map<String, ArrayList<String>> parseMap = null;
 
 	public MainMenuController() {
 		initComponents();
@@ -107,18 +108,26 @@ public class MainMenuController {
 
 	private void parseSiteList() {
 
-		parseList = new ArrayList<>();
-
 		SiteParserExtend parser = new ArchiveOrgSiteParser();
 
 		for (String item : websiteList) {
 
 			parser.setTargetSite(item);
 			parser.parse();
-			parseList = parser.getTargetSiteList();
 
 		}
-		nodesLabel.setText(String.valueOf(parseList.size()));
+
+		parseMap = parser.getTargetSiteMap();
+
+		int nodeCount = 0;
+		for (Map.Entry<String, ArrayList<String>> item : parseMap.entrySet()) {
+			System.out.println("_______________");
+			for (String string : item.getValue()) {
+				System.out.println(string);
+			}
+			nodeCount += item.getValue().size();
+		}
+		nodesLabel.setText(String.valueOf(nodeCount));
 		loadingLabel.setText("<html><font color='blue'>Pars loading success!</font></html>");
 
 	}
@@ -129,7 +138,8 @@ public class MainMenuController {
 		String saveDirPath = exportFolderTextField.getText().replaceAll("\\\\", "\\\\\\\\");
 
 		ScreenshotSaver saver = new ScreenshotSaverSelenium(driverPath, saveDirPath);
-		saver.start(parseList);
+
+		saver.start(parseMap);
 
 		loadingLabel.setText("<html><font color='red'>Operation success!</font></html>");
 		websitesLabel.setText("0");

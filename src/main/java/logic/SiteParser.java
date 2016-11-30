@@ -1,5 +1,7 @@
 package logic;
-import java.util.List;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public interface SiteParser {
 
@@ -9,7 +11,7 @@ public interface SiteParser {
 
 	public void clear();
 
-	public List<String> getTargetSiteList();
+	public Map<String, ArrayList<String>> getTargetSiteMap();
 
 	public void setRegex(String regex);
 }
