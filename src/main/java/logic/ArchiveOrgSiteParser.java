@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import resources.Constants;
 
 public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
@@ -18,7 +21,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 	private String lastYearPrefix = "https://web.archive.org/web/*/";
 	private String targetYearPrefix = "https://web.archive.org/web/";
 	private String targetYearPostfix = "0101000000*/";
-	private int starYear = 2006;
+	private int starYear;
 
 	private int maxLinkPerYear = 12;
 	private boolean monthGroup1 = true, monthGroup2 = true, monthGroup3 = true, monthGroup4 = true;
@@ -28,6 +31,14 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
 	private Map<String, ArrayList<String>> hrefMap = new HashMap<>();
 	private ArrayList<String> hrefList = new ArrayList<>();
+
+	public ArchiveOrgSiteParser() {
+		PropetiesWorker propetiesWorker = new PropetiesWorker();
+		Properties properties = propetiesWorker.readProperties(Constants.CONFIG_PATH);
+
+		starYear = Integer.parseInt(properties.getProperty("parse.starYear"));
+		maxLinkPerYear = Integer.parseInt(properties.getProperty("parse.maxLinkPerYear"));
+	}
 
 	/**
 	 * parse target site, to get Map of unique urls.
