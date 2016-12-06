@@ -8,38 +8,41 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 
 import resources.Constants;
 
 public class MainMenuFrame extends JFrame {
 
-	JPanel mainPanel;
+	private JPanel mainPanel;
 
-	JTextField driverTextField;
-	JButton driverPathButton;
+	private JTextField driverTextField;
+	private JButton driverPathButton;
 
-	JTextField importFileTextField;
-	JButton importFilePathButton;
+	private JTextField importFileTextField;
+	private JButton importFilePathButton;
 
-	JTextField exportFolderTextField;
-	JButton exportFolderPathButton;
+	private JTextField exportFolderTextField;
+	private JButton exportFolderPathButton;
 
-	JButton loadSiteListButton;
-	JButton parseButton;
-	JButton screenshotsSaveButton;
+	private JButton loadSiteListButton;
+	private JButton parseButton;
+	private JButton screenshotsSaveButton;
 
-	JLabel loadingLabel;
-	JLabel websitesLabel;
-	JLabel nodesLabel;
+	private JLabel loadingLabel;
+	private JLabel websitesLabel;
+	private JLabel nodesLabel;
 
-	JProgressBar progressBar;
+	private JTextField maxLinksTextField;
+	private JButton setParseConfigButton;
+	private JTextField startYearTextField;
+	private JLabel labelStartYear;
 
 	/**
 	 * Create the application.
 	 */
 	public MainMenuFrame() {
+		setResizable(false);
 		initialize();
 	}
 
@@ -49,8 +52,7 @@ public class MainMenuFrame extends JFrame {
 	private void initialize() {
 
 		setTitle(Constants.PROGRAM_TITLE);
-		setResizable(false);
-		setBounds(100, 100, 500, 310);
+		setBounds(100, 100, 530, 340);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		mainPanel = new JPanel();
@@ -63,12 +65,12 @@ public class MainMenuFrame extends JFrame {
 
 		driverTextField = new JTextField();
 		driverTextField.setEditable(false);
-		driverTextField.setBounds(10, 25, 366, 20);
+		driverTextField.setBounds(10, 25, 384, 20);
 		mainPanel.add(driverTextField);
 		driverTextField.setColumns(10);
 
 		driverPathButton = new JButton("Browse");
-		driverPathButton.setBounds(388, 25, 100, 21);
+		driverPathButton.setBounds(406, 25, 112, 21);
 		mainPanel.add(driverPathButton);
 
 		JLabel labelImportFile = new JLabel("Path to input file. (.csv)");
@@ -77,12 +79,12 @@ public class MainMenuFrame extends JFrame {
 
 		importFileTextField = new JTextField();
 		importFileTextField.setEditable(false);
-		importFileTextField.setBounds(10, 65, 366, 20);
+		importFileTextField.setBounds(10, 65, 384, 20);
 		mainPanel.add(importFileTextField);
 		importFileTextField.setColumns(10);
 
 		importFilePathButton = new JButton("Browse");
-		importFilePathButton.setBounds(388, 65, 100, 20);
+		importFilePathButton.setBounds(406, 65, 112, 20);
 		mainPanel.add(importFilePathButton);
 
 		JLabel labelExport = new JLabel("Path to export folder.(save folder)");
@@ -91,16 +93,16 @@ public class MainMenuFrame extends JFrame {
 
 		exportFolderTextField = new JTextField();
 		exportFolderTextField.setEditable(false);
-		exportFolderTextField.setBounds(10, 106, 366, 20);
+		exportFolderTextField.setBounds(10, 106, 384, 20);
 		mainPanel.add(exportFolderTextField);
 		exportFolderTextField.setColumns(10);
 
 		exportFolderPathButton = new JButton("Browse");
-		exportFolderPathButton.setBounds(388, 106, 100, 20);
+		exportFolderPathButton.setBounds(406, 106, 112, 20);
 		mainPanel.add(exportFolderPathButton);
 
 		loadSiteListButton = new JButton("Load site list");
-		loadSiteListButton.setBounds(388, 152, 100, 20);
+		loadSiteListButton.setBounds(406, 221, 112, 20);
 		mainPanel.add(loadSiteListButton);
 
 		parseButton = new JButton("Start Prase");
@@ -109,37 +111,55 @@ public class MainMenuFrame extends JFrame {
 			}
 		});
 		parseButton.setEnabled(false);
-		parseButton.setBounds(388, 184, 99, 20);
+		parseButton.setBounds(406, 253, 111, 20);
 		mainPanel.add(parseButton);
 
 		screenshotsSaveButton = new JButton("Start Saving");
 		screenshotsSaveButton.setEnabled(false);
-		screenshotsSaveButton.setBounds(388, 216, 100, 20);
+		screenshotsSaveButton.setBounds(406, 285, 112, 20);
 		mainPanel.add(screenshotsSaveButton);
 
 		loadingLabel = new JLabel("Loading:");
-		loadingLabel.setBounds(10, 155, 354, 14);
+		loadingLabel.setBounds(10, 224, 354, 14);
 		mainPanel.add(loadingLabel);
 
 		JLabel labelWebsites = new JLabel("Websites:");
-		labelWebsites.setBounds(10, 187, 70, 14);
+		labelWebsites.setBounds(10, 256, 70, 14);
 		mainPanel.add(labelWebsites);
 
 		websitesLabel = new JLabel("0");
-		websitesLabel.setBounds(90, 187, 286, 14);
+		websitesLabel.setBounds(90, 256, 286, 14);
 		mainPanel.add(websitesLabel);
 
 		JLabel labelNodes = new JLabel("Nodes:");
-		labelNodes.setBounds(10, 219, 46, 14);
+		labelNodes.setBounds(10, 288, 46, 14);
 		mainPanel.add(labelNodes);
 
 		nodesLabel = new JLabel("0");
-		nodesLabel.setBounds(90, 219, 286, 14);
+		nodesLabel.setBounds(90, 288, 286, 14);
 		mainPanel.add(nodesLabel);
 
-		progressBar = new JProgressBar();
-		progressBar.setBounds(10, 248, 478, 19);
-		mainPanel.add(progressBar);
+		JLabel labelMaxLinks = new JLabel("Maximum  links per year(Archive.org*)");
+		labelMaxLinks.setBounds(10, 127, 230, 16);
+		mainPanel.add(labelMaxLinks);
+
+		maxLinksTextField = new JTextField();
+		maxLinksTextField.setBounds(10, 147, 230, 20);
+		mainPanel.add(maxLinksTextField);
+		maxLinksTextField.setColumns(10);
+
+		setParseConfigButton = new JButton("Set");
+		setParseConfigButton.setBounds(406, 147, 112, 21);
+		mainPanel.add(setParseConfigButton);
+
+		startYearTextField = new JTextField();
+		startYearTextField.setBounds(252, 147, 142, 20);
+		mainPanel.add(startYearTextField);
+		startYearTextField.setColumns(10);
+
+		labelStartYear = new JLabel(" Strat year(Archive.org*)");
+		labelStartYear.setBounds(252, 127, 142, 16);
+		mainPanel.add(labelStartYear);
 
 	}
 
@@ -191,8 +211,16 @@ public class MainMenuFrame extends JFrame {
 		return nodesLabel;
 	}
 
-	public JProgressBar getProgressBar() {
-		return progressBar;
+	public JTextField getMaxLinksTextField() {
+		return maxLinksTextField;
+	}
+
+	public JButton getSetParseConfigButton() {
+		return setParseConfigButton;
+	}
+
+	public JTextField getStartYearTextField() {
+		return startYearTextField;
 	}
 
 }

@@ -12,9 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.apache.commons.lang3.math.NumberUtils;
 
 import logic.ArchiveOrgSiteParser;
 import logic.CSVFileParser;
@@ -47,7 +48,9 @@ public class MainMenuController {
 	private JLabel websitesLabel;
 	private JLabel nodesLabel;
 
-	JProgressBar progressBar;
+	private JTextField maxLinksTextField;
+	private JButton setParseConfigButton;
+	private JTextField startYearTextField;
 
 	private List<String> websiteList = null;
 	private Map<String, ArrayList<String>> parseMap = null;
@@ -83,7 +86,9 @@ public class MainMenuController {
 		websitesLabel = mainMenu.getWebsitesLabel();
 		nodesLabel = mainMenu.getNodesLabel();
 
-		progressBar = mainMenu.getProgressBar();
+		maxLinksTextField = mainMenu.getMaxLinksTextField();
+		setParseConfigButton = mainMenu.getSetParseConfigButton();
+		startYearTextField = mainMenu.getStartYearTextField();
 
 	}
 
@@ -95,6 +100,8 @@ public class MainMenuController {
 		loadSiteListButton.addActionListener(new loadSiteListButtonActionListener());
 		parseButton.addActionListener(new parseButtonActionListener());
 		screenshotsSaveButton.addActionListener(new screenshotsSaveButtonActionListener());
+
+		setParseConfigButton.addActionListener(new setParseConfigButtonActionListener());
 	}
 
 	private void loadImportFile() {
@@ -159,11 +166,14 @@ public class MainMenuController {
 	}
 
 	private void updateInfo() {
+
 		PropetiesWorker propetiesWorker = new PropetiesWorker();
 		Properties properties = propetiesWorker.readProperties(Constants.CONFIG_PATH);
 
-		driverTextField.setText(properties.getProperty("driver.path"));
-		exportFolderTextField.setText(properties.getProperty("exportFolder.path"));
+		driverTextField.setText(properties.getProperty("path.driver"));
+		exportFolderTextField.setText(properties.getProperty("path.exportFolder"));
+		maxLinksTextField.setText(properties.getProperty("parse.maxLinkPerYear"));
+		startYearTextField.setText(properties.getProperty("parse.starYear"));
 
 	}
 
@@ -180,7 +190,7 @@ public class MainMenuController {
 			PropetiesWorker propetiesWorker = new PropetiesWorker();
 
 			Map<String, String> propertiesMap = new HashMap<>();
-			propertiesMap.put("driver.path", fileChooser.getSelectedFile().getAbsolutePath());
+			propertiesMap.put("path.driver", fileChooser.getSelectedFile().getAbsolutePath());
 
 			propetiesWorker.changePropeties(propertiesMap);
 
@@ -201,7 +211,7 @@ public class MainMenuController {
 			PropetiesWorker propetiesWorker = new PropetiesWorker();
 
 			Map<String, String> propertiesMap = new HashMap<>();
-			propertiesMap.put("exportFolder.path", fileChooser.getSelectedFile().getAbsolutePath());
+			propertiesMap.put("path.exportFolder", fileChooser.getSelectedFile().getAbsolutePath());
 
 			propetiesWorker.changePropeties(propertiesMap);
 
@@ -210,8 +220,27 @@ public class MainMenuController {
 		}
 	}
 
-	public JProgressBar getProgressBar() {
-		return progressBar;
+	private void setParseConfig() {
+
+		String maxLink = maxLinksTextField.getText();
+		String startYear = startYearTextField.getText();
+
+		if (NumberUtils.isDigits(maxLink)) {
+			if (NumberUtils.isDigits(startYear)) {
+
+				Map<String, String> propertiesMap = new HashMap<>();
+				propertiesMap.put("parse.maxLinkPerYear", maxLink);
+				propertiesMap.put("parse.starYear", startYear);
+
+				PropetiesWorker propetiesWorker = new PropetiesWorker();
+				propetiesWorker.changePropeties(propertiesMap);
+
+				updateInfo();
+			}
+
+		}
+		JOptionPane.showMessageDialog(null, "Fields mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
+		updateInfo();
 	}
 
 	private class driverPathButtonActionListener implements ActionListener {
@@ -305,6 +334,17 @@ public class MainMenuController {
 			startScreenshotSave();
 
 		}
+	}
+
+	private class setParseConfigButtonActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			setParseConfig();
+
+		}
+
 	}
 
 }
