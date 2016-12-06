@@ -32,34 +32,27 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
 		try {
 
-			System.out.println("Start operation");
-
 			// Loading chrome driver
 			driver = new ChromeDriver(driverService);
 			// set window full screen
 			driver.manage().window().maximize();
 			// Set timeout for loading page (15 second)
-			driver.manage().timeouts().pageLoadTimeout(15, TimeUnit.SECONDS);
+			driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 
-			// for (String site : siteList) {
 			for (Map.Entry<String, ArrayList<String>> item : siteMap.entrySet()) {
 
 				for (String site : item.getValue()) {
-					System.out.println("_______________________________");
-					System.out.println("Loading site:[" + site + "]...");
 
 					// loading site
 					try {
 						driver.get(site);
 					} catch (TimeoutException e) {
-						System.out.println("loading brack! timeout > 10sec");
+						System.out.println("loading brack! timeout > 20 sec");
 					}
 
 					// take & save screenshot
 					takeScreenshot(driver, fileSaver, item.getKey());
 
-					System.out.println("Operation ended.");
-					System.out.println("___________________________");
 				}
 			}
 
@@ -70,6 +63,7 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 				driver.close();
 			}
 		}
+
 	}
 
 	private void takeScreenshot(WebDriver driver, FileSaver fileSaver, String siteName) {
