@@ -13,7 +13,8 @@ import resources.Constants;
 public class PropetiesWorker {
 
 	public PropetiesWorker() {
-		if (!isPropertiesExist()) {
+
+		if (!isPropertiesExist() || !isPropertiesVersionCorrect()) {
 			createPropertiesFile();
 		} else {
 			System.out.println("OK");
@@ -22,8 +23,10 @@ public class PropetiesWorker {
 	}
 
 	public void changePropeties(Map<String, String> propertiesMap) {
+		// reading properties
 		Properties properties = readProperties(Constants.CONFIG_PATH);
 
+		// change needed properies
 		for (Map.Entry<String, String> entry : propertiesMap.entrySet()) {
 
 			properties.setProperty(entry.getKey(), entry.getValue());
@@ -104,8 +107,12 @@ public class PropetiesWorker {
 	private void writeTemplateProperties() {
 		LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
 
-		linkedHashMap.put("driver.path", "");
-		linkedHashMap.put("exportFolder.path", "");
+		// default properties
+		linkedHashMap.put("version", Constants.PRODUCT_VERSION);
+		linkedHashMap.put("path.driver", "");
+		linkedHashMap.put("path.exportFolder", "");
+		linkedHashMap.put("parse.maxLinkPerYear", "12");
+		linkedHashMap.put("parse.starYear", "2006");
 
 		writeNewPropertiesFile(linkedHashMap);
 
@@ -124,6 +131,20 @@ public class PropetiesWorker {
 				return true;
 
 			}
+		}
+
+		return false;
+	}
+
+	private boolean isPropertiesVersionCorrect() {
+
+		Properties properties = readProperties(Constants.CONFIG_PATH);
+
+		String version = properties.getProperty("version");
+
+		if (version.equals(Constants.PRODUCT_VERSION)) {
+
+			return true;
 		}
 
 		return false;
