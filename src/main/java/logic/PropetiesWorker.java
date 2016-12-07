@@ -139,10 +139,10 @@ public class PropetiesWorker {
 	private boolean isPropertiesVersionCorrect() {
 
 		Properties properties = readProperties(Constants.CONFIG_PATH);
-
 		String version = properties.getProperty("version");
 
-		if (version.equals(Constants.PRODUCT_VERSION)) {
+		// if it`s old version of properties
+		if (version != null && version.equals(Constants.PRODUCT_VERSION)) {
 
 			return true;
 		}
