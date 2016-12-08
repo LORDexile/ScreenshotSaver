@@ -9,8 +9,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
@@ -28,12 +27,21 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
 		WebDriver driver = null;
 		// path to chrome driver
-		ChromeDriverService driverService = new ChromeDriverService.Builder().usingDriverExecutable(new File(driverPath)).build();
+		// ChromeDriverService driverService = new
+		// ChromeDriverService.Builder().usingDriverExecutable(new
+		// File(driverPath)).build();
+		if (System.getProperty("webdriver.gecko.driver") == null) {
+			System.setProperty("webdriver.gecko.driver", driverPath);
+		}
 
 		try {
 
 			// Loading chrome driver
-			driver = new ChromeDriver(driverService);
+			// driver = new ChromeDriver(driverService);
+
+			driver = new FirefoxDriver();
+
+			// driver = new FirefoxDriver();
 			// set window full screen
 			driver.manage().window().maximize();
 			// Set timeout for loading page (15 second)
