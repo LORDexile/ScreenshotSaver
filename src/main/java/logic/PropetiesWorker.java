@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import resources.Constants;
+import resources.PropertyConstants;
 
 public class PropetiesWorker {
 
@@ -108,11 +109,12 @@ public class PropetiesWorker {
 		LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
 
 		// default properties
-		linkedHashMap.put("version", Constants.PRODUCT_VERSION);
-		linkedHashMap.put("path.driver", "");
-		linkedHashMap.put("path.exportFolder", "");
-		linkedHashMap.put("parse.maxLinkPerYear", "12");
-		linkedHashMap.put("parse.starYear", "2006");
+		linkedHashMap.put(PropertyConstants.PROGRAM_VERSION, Constants.PRODUCT_VERSION);
+		linkedHashMap.put(PropertyConstants.PATH_DRIVER, "");
+		linkedHashMap.put(PropertyConstants.PATH_EXPORT_FOLDER, "");
+		linkedHashMap.put(PropertyConstants.PARSE_MAX_LINK_PER_YEAR, "12");
+		linkedHashMap.put(PropertyConstants.PARSE_START_YEAR, "2006");
+		linkedHashMap.put(PropertyConstants.PARSE_MIN_TEXT_LENGHTS, "999");
 
 		writeNewPropertiesFile(linkedHashMap);
 
@@ -139,7 +141,7 @@ public class PropetiesWorker {
 	private boolean isPropertiesVersionCorrect() {
 
 		Properties properties = readProperties(Constants.CONFIG_PATH);
-		String version = properties.getProperty("version");
+		String version = properties.getProperty(PropertyConstants.PROGRAM_VERSION);
 
 		// if it`s old version of properties
 		if (version != null && version.equals(Constants.PRODUCT_VERSION)) {
@@ -165,6 +167,12 @@ public class PropetiesWorker {
 				System.out.println("file was created!");
 			} else {
 				System.out.println("file exist!");
+			}
+			file = new File(Constants.TMP_PATH);
+			if (file.mkdirs()) {
+				System.out.println("tmp file was created!");
+			} else {
+				System.out.println("tmp file exist!");
 			}
 
 		} catch (Exception e) {

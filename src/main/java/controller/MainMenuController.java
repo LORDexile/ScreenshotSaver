@@ -3,10 +3,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -20,11 +18,10 @@ import org.apache.commons.lang3.math.NumberUtils;
 import logic.ArchiveOrgSiteParser;
 import logic.CSVFileParser;
 import logic.FileParser;
-import logic.PropetiesWorker;
 import logic.ScreenshotSaver;
 import logic.ScreenshotSaverSelenium;
 import logic.SiteParserExtend;
-import resources.Constants;
+import resources.PropertyHolder;
 import view.MainMenuFrame;
 
 public class MainMenuController {
@@ -151,10 +148,9 @@ public class MainMenuController {
 
 	private void startScreenshotSave() {
 
-		String driverPath = driverTextField.getText().replaceAll("\\\\", "\\\\\\\\");
 		String saveDirPath = exportFolderTextField.getText().replaceAll("\\\\", "\\\\\\\\");
 
-		ScreenshotSaver saver = new ScreenshotSaverSelenium(driverPath, saveDirPath);
+		ScreenshotSaver saver = new ScreenshotSaverSelenium(saveDirPath);
 
 		saver.start(parseMap);
 
@@ -167,13 +163,10 @@ public class MainMenuController {
 
 	private void updateInfo() {
 
-		PropetiesWorker propetiesWorker = new PropetiesWorker();
-		Properties properties = propetiesWorker.readProperties(Constants.CONFIG_PATH);
-
-		driverTextField.setText(properties.getProperty("path.driver"));
-		exportFolderTextField.setText(properties.getProperty("path.exportFolder"));
-		maxLinksTextField.setText(properties.getProperty("parse.maxLinkPerYear"));
-		startYearTextField.setText(properties.getProperty("parse.starYear"));
+		driverTextField.setText(PropertyHolder.getPathDriver());
+		exportFolderTextField.setText(PropertyHolder.getPathExportFolder());
+		maxLinksTextField.setText(PropertyHolder.getParseMaxLinkPerYear());
+		startYearTextField.setText(PropertyHolder.getParseStarYear());
 
 	}
 
@@ -187,12 +180,7 @@ public class MainMenuController {
 
 		if (answer == JFileChooser.APPROVE_OPTION) {
 
-			PropetiesWorker propetiesWorker = new PropetiesWorker();
-
-			Map<String, String> propertiesMap = new HashMap<>();
-			propertiesMap.put("path.driver", fileChooser.getSelectedFile().getAbsolutePath());
-
-			propetiesWorker.changePropeties(propertiesMap);
+			PropertyHolder.setPathDriver(fileChooser.getSelectedFile().getAbsolutePath());
 
 			updateInfo();
 		}
@@ -208,12 +196,7 @@ public class MainMenuController {
 
 		if (answer == JFileChooser.APPROVE_OPTION) {
 
-			PropetiesWorker propetiesWorker = new PropetiesWorker();
-
-			Map<String, String> propertiesMap = new HashMap<>();
-			propertiesMap.put("path.exportFolder", fileChooser.getSelectedFile().getAbsolutePath());
-
-			propetiesWorker.changePropeties(propertiesMap);
+			PropertyHolder.setPathExportFolder(fileChooser.getSelectedFile().getAbsolutePath());
 
 			updateInfo();
 
@@ -228,19 +211,17 @@ public class MainMenuController {
 		if (NumberUtils.isDigits(maxLink)) {
 			if (NumberUtils.isDigits(startYear)) {
 
-				Map<String, String> propertiesMap = new HashMap<>();
-				propertiesMap.put("parse.maxLinkPerYear", maxLink);
-				propertiesMap.put("parse.starYear", startYear);
+				PropertyHolder.setParseMaxLinkPerYear(maxLink);
+				PropertyHolder.setParseStarYear(startYear);
 
-				PropetiesWorker propetiesWorker = new PropetiesWorker();
-				propetiesWorker.changePropeties(propertiesMap);
-
-				updateInfo();
 			}
 
+		} else {
+			JOptionPane.showMessageDialog(null, "Fields mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
 		}
-		JOptionPane.showMessageDialog(null, "Fields mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
+
 		updateInfo();
+
 	}
 
 	private class driverPathButtonActionListener implements ActionListener {
