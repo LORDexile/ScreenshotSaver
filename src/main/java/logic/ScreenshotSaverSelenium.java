@@ -13,13 +13,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
-	// TODO load from property
-	private String driverPath;
 	// load fileSaver
 	private FileSaver fileSaver;
 
-	public ScreenshotSaverSelenium(String driverPath, String saveDirPath) {
-		this.driverPath = driverPath;
+	public ScreenshotSaverSelenium(String saveDirPath) {
 		fileSaver = new FolderFileSaver(saveDirPath);
 	}
 
@@ -30,10 +27,6 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 		// ChromeDriverService driverService = new
 		// ChromeDriverService.Builder().usingDriverExecutable(new
 		// File(driverPath)).build();
-		if (System.getProperty("webdriver.gecko.driver") == null) {
-			System.setProperty("webdriver.gecko.driver", driverPath);
-		}
-
 		try {
 
 			// Loading chrome driver
