@@ -110,7 +110,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 			if (newList.size() > maxLinkPerYear) {
 
 				for (String string : newList) {
-					if (filter(string)) {
+					if (monthFilter(string)) {
 
 						hrefList.add(string);
 					}
@@ -123,6 +123,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 			} else {
 				hrefList.addAll(newList);
 			}
+			// Site name + List of Links
 			hrefMap.put(targetSite, hrefList);
 			System.out.println(targetSite + " - " + hrefList.size());
 
@@ -139,9 +140,10 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
 		hrefMap = new HashMap<>();
 		hrefList = new ArrayList<>();
+
 	}
 
-	private boolean filter(String string) {
+	private boolean monthFilter(String string) {
 
 		// take month from url
 		int beginIndex = 32;// 9
