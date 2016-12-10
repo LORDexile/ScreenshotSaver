@@ -12,6 +12,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import interfaces.SiteParser;
+import interfaces.SiteParserExtend;
 import resources.Constants;
 
 public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {

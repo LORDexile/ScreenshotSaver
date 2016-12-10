@@ -1,4 +1,4 @@
-package logic;
+package interfaces;
 import java.io.File;
 
 public interface FileSaver {

@@ -9,6 +9,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
+import interfaces.FileParser;
+
 public class CSVFileParser implements FileParser {
 
 	public List<String> readFile(String filePath) throws IOException {

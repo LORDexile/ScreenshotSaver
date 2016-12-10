@@ -1,4 +1,4 @@
-package logic;
+package interfaces;
 
 import java.util.ArrayList;
 import java.util.Map;

@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 
+import interfaces.FileSaver;
+
 public class FolderFileSaver implements FileSaver {
 
 	private String homeDirPath;

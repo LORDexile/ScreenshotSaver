@@ -11,6 +11,9 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import interfaces.FileSaver;
+import interfaces.ScreenshotSaver;
+
 public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
 	// load fileSaver
@@ -23,14 +26,8 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 	public void start(Map<String, ArrayList<String>> siteMap) {
 
 		WebDriver driver = null;
-		// path to chrome driver
-		// ChromeDriverService driverService = new
-		// ChromeDriverService.Builder().usingDriverExecutable(new
-		// File(driverPath)).build();
-		try {
 
-			// Loading chrome driver
-			// driver = new ChromeDriver(driverService);
+		try {
 
 			driver = new FirefoxDriver();
 
