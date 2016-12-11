@@ -114,7 +114,8 @@ public class PropetiesWorker {
 		linkedHashMap.put(PropertyConstants.PATH_EXPORT_FOLDER, "");
 		linkedHashMap.put(PropertyConstants.PARSE_MAX_LINK_PER_YEAR, "12");
 		linkedHashMap.put(PropertyConstants.PARSE_START_YEAR, "2006");
-		linkedHashMap.put(PropertyConstants.PARSE_MIN_TEXT_LENGHTS, "999");
+		linkedHashMap.put(PropertyConstants.PARSE_MIN_TEXT_LENGHTS, "250");
+		linkedHashMap.put(PropertyConstants.PARSE_UNIQUE_VALUE_WAITING, "3600");
 
 		writeNewPropertiesFile(linkedHashMap);
 

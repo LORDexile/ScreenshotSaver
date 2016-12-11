@@ -8,4 +8,6 @@ public final class PropertyConstants {
 	public static final String PARSE_START_YEAR = "parse.starYear";
 	public static final String PARSE_MIN_TEXT_LENGHTS = "parse.minTextLenghts";
 
+	public static final String PARSE_UNIQUE_VALUE_WAITING = "parse.uniqueValueWaiting";
+
 }
