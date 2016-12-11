@@ -31,10 +31,9 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 
 			driver = new FirefoxDriver();
 
-			// driver = new FirefoxDriver();
 			// set window full screen
 			driver.manage().window().maximize();
-			// Set timeout for loading page (15 second)
+			// Set timeout for loading page (20 second)
 			driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 
 			for (Map.Entry<String, ArrayList<String>> item : siteMap.entrySet()) {
@@ -58,7 +57,7 @@ public class ScreenshotSaverSelenium implements ScreenshotSaver {
 			e.printStackTrace();
 		} finally {
 			if (driver != null) {
-				driver.close();
+				driver.quit();
 			}
 		}
 
