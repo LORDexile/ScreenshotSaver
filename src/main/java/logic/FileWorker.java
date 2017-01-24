@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import resources.Constants;
+import resources.FileType;
 
 public class FileWorker {
 
@@ -41,14 +42,18 @@ public class FileWorker {
 			return false;
 		} finally {
 			try {
-				bufferedWriter.close();
+				if (bufferedWriter != null) {
+					bufferedWriter.close();
+				}
 			} catch (IOException ex) {
 
 				System.out.println("breack close opertion");
 			}
 
 			try {
-				fileOutputStream.close();
+				if (fileOutputStream != null) {
+					fileOutputStream.close();
+				}
 			} catch (IOException ex) {
 				System.out.println("breack close opertion");
 			}
@@ -58,8 +63,26 @@ public class FileWorker {
 
 	}
 
-	public boolean writeObjectFile(Object object) {
-		return writeObjectFile(Constants.TMP_PATH, "tmp", object);
+	public boolean writeObjectFile(String name, Object object) {
+		return writeObjectFile(Constants.TMP_PATH, name, object);
+	}
+
+	public boolean writeObjectTmp(FileType type, Object object) {
+		String fileName = "tmp";
+		switch (type) {
+		case TMP:
+			break;
+		case SITE_LIST:
+			fileName = "sitelist";
+			break;
+		case PARSED_SITE_MAP:
+			fileName = "parsed_site_list";
+			break;
+		default:
+			return false;
+		}
+
+		return writeObjectFile(Constants.TMP_PATH, fileName, object);
 	}
 
 	private boolean writeObjectFile(String path, String name, Object object) {
@@ -80,13 +103,17 @@ public class FileWorker {
 			return false;
 		} finally {
 			try {
-				fileOutputStream.close();
+				if (fileOutputStream != null) {
+					fileOutputStream.close();
+				}
 			} catch (IOException ex) {
 				System.out.println("breack close opertion");
 			}
 
 			try {
-				objectOutputStream.close();
+				if (objectOutputStream != null) {
+					objectOutputStream.close();
+				}
 			} catch (IOException ex) {
 				System.out.println("breack close opertion");
 			}
@@ -94,13 +121,32 @@ public class FileWorker {
 		return true;
 	}
 
-	public Object readObjectFile() {
-		return readObjectFile(Constants.TMP_PATH, "tmp");
+	public Object readObjectFile(String name) {
+		return readObjectFile(Constants.TMP_PATH, name);
+	}
+
+	public Object readObjectTmp(FileType type) {
+		String fileName = "tmp";
+		switch (type) {
+		case TMP:
+			break;
+		case SITE_LIST:
+			fileName = "sitelist";
+			break;
+		case PARSED_SITE_MAP:
+			fileName = "parsed_site_list";
+			break;
+		default:
+			return false;
+		}
+		return readObjectFile(Constants.TMP_PATH, fileName);
 	}
 
 	private Object readObjectFile(String path, String name) {
 
 		Object object = null;
+
+		System.out.println("reading...");
 
 		FileInputStream fileInputStream = null;
 		ObjectInputStream objectInputStream = null;
@@ -120,13 +166,17 @@ public class FileWorker {
 			return null;
 		} finally {
 			try {
-				fileInputStream.close();
+				if (fileInputStream != null) {
+					fileInputStream.close();
+				}
 			} catch (IOException ex) {
 				System.out.println("breack close opertion");
 			}
 
 			try {
-				objectInputStream.close();
+				if (objectInputStream != null) {
+					objectInputStream.close();
+				}
 			} catch (IOException ex) {
 				System.out.println("breack close opertion");
 			}

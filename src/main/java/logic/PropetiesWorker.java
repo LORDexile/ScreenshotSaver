@@ -114,8 +114,10 @@ public class PropetiesWorker {
 		linkedHashMap.put(PropertyConstants.PATH_EXPORT_FOLDER, "");
 		linkedHashMap.put(PropertyConstants.PARSE_MAX_LINK_PER_YEAR, "12");
 		linkedHashMap.put(PropertyConstants.PARSE_START_YEAR, "2006");
-		linkedHashMap.put(PropertyConstants.PARSE_MIN_TEXT_LENGHTS, "250");
+		linkedHashMap.put(PropertyConstants.PARSE_MIN_TEXT_LENGTH, "250");
 		linkedHashMap.put(PropertyConstants.PARSE_UNIQUE_VALUE_WAITING, "3600");
+		linkedHashMap.put(PropertyConstants.PARSE_TEXT_RU_LOGIN, "j1352013@mvrht.com");
+		linkedHashMap.put(PropertyConstants.PARSE_TEXT_RU_PASSWORD, "c74aX1eMp");
 
 		writeNewPropertiesFile(linkedHashMap);
 
@@ -131,8 +133,11 @@ public class PropetiesWorker {
 
 			if (file.exists()) {
 
-				return true;
+				file = new File(Constants.TMP_PATH);
 
+				if (file.exists()) {
+					return true;
+				}
 			}
 		}
 
@@ -158,18 +163,23 @@ public class PropetiesWorker {
 		try {
 
 			File file = new File(Constants.PROGRAM_SOURCE_FOLDER);
+
 			if (file.mkdirs()) {
 				System.out.println("dir was created!");
 			} else {
 				System.out.println("dir exist!");
 			}
+
 			file = new File(Constants.CONFIG_PATH);
+
 			if (file.createNewFile()) {
 				System.out.println("file was created!");
 			} else {
 				System.out.println("file exist!");
 			}
+
 			file = new File(Constants.TMP_PATH);
+
 			if (file.mkdirs()) {
 				System.out.println("tmp file was created!");
 			} else {

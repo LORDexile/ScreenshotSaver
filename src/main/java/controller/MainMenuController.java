@@ -7,20 +7,22 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
+import interfaces.FileParser;
+import interfaces.ScreenshotSaver;
+import interfaces.SiteParserExtend;
 import logic.ArchiveOrgSiteParser;
 import logic.CSVFileParser;
-import logic.FileParser;
-import logic.ScreenshotSaver;
+import logic.FileWorker;
 import logic.ScreenshotSaverSelenium;
-import logic.SiteParserExtend;
+import logic.TextSiteParser;
+import resources.FileType;
 import resources.PropertyHolder;
 import view.MainMenuFrame;
 
@@ -45,9 +47,8 @@ public class MainMenuController {
 	private JLabel websitesLabel;
 	private JLabel nodesLabel;
 
-	private JTextField maxLinksTextField;
-	private JButton setParseConfigButton;
-	private JTextField startYearTextField;
+	private JButton parseTextButton;
+	private JButton optionsButton;
 
 	private List<String> websiteList = null;
 	private Map<String, ArrayList<String>> parseMap = null;
@@ -83,9 +84,8 @@ public class MainMenuController {
 		websitesLabel = mainMenu.getWebsitesLabel();
 		nodesLabel = mainMenu.getNodesLabel();
 
-		maxLinksTextField = mainMenu.getMaxLinksTextField();
-		setParseConfigButton = mainMenu.getSetParseConfigButton();
-		startYearTextField = mainMenu.getStartYearTextField();
+		parseTextButton = mainMenu.getParseTextButton();
+		optionsButton = mainMenu.getOptionsButton();
 
 	}
 
@@ -98,7 +98,8 @@ public class MainMenuController {
 		parseButton.addActionListener(new parseButtonActionListener());
 		screenshotsSaveButton.addActionListener(new screenshotsSaveButtonActionListener());
 
-		setParseConfigButton.addActionListener(new setParseConfigButtonActionListener());
+		parseTextButton.addActionListener(new parseTextButtonActionListener());
+		optionsButton.addActionListener(new optionButtonActionListener());
 	}
 
 	private void loadImportFile() {
@@ -110,6 +111,12 @@ public class MainMenuController {
 		try {
 
 			websiteList = fileParser.readFile(path);
+
+			// save tmp dir
+			FileWorker worker = new FileWorker();
+			if (worker.writeObjectTmp(FileType.SITE_LIST, websiteList)) {
+				System.out.println("good");
+			}
 			loadingLabel.setText("<html><font color='green'>Loding websites success</font></html>");
 			websitesLabel.setText(String.valueOf(websiteList.size()));
 
@@ -133,6 +140,12 @@ public class MainMenuController {
 
 		parseMap = parser.getTargetSiteMap();
 
+		// saving to tmp dir
+		FileWorker worker = new FileWorker();
+		if (worker.writeObjectTmp(FileType.PARSED_SITE_MAP, parseMap)) {
+			System.out.println("good");
+		}
+
 		int nodeCount = 0;
 		for (Map.Entry<String, ArrayList<String>> item : parseMap.entrySet()) {
 			System.out.println("_______________");
@@ -143,7 +156,6 @@ public class MainMenuController {
 		}
 		nodesLabel.setText(String.valueOf(nodeCount));
 		loadingLabel.setText("<html><font color='blue'>Pars loading success!</font></html>");
-
 	}
 
 	private void startScreenshotSave() {
@@ -165,8 +177,6 @@ public class MainMenuController {
 
 		driverTextField.setText(PropertyHolder.getPathDriver());
 		exportFolderTextField.setText(PropertyHolder.getPathExportFolder());
-		maxLinksTextField.setText(PropertyHolder.getParseMaxLinkPerYear());
-		startYearTextField.setText(PropertyHolder.getParseStarYear());
 
 	}
 
@@ -203,24 +213,164 @@ public class MainMenuController {
 		}
 	}
 
-	private void setParseConfig() {
+	private void parseText() {
 
-		String maxLink = maxLinksTextField.getText();
-		String startYear = startYearTextField.getText();
+		TextParserController controller2 = new TextParserController();
+		controller2.showTextParserFrame();
 
-		if (NumberUtils.isDigits(maxLink)) {
-			if (NumberUtils.isDigits(startYear)) {
+		boolean param = false;
 
-				PropertyHolder.setParseMaxLinkPerYear(maxLink);
-				PropertyHolder.setParseStarYear(startYear);
+		if (param) {
+			TextSiteParser parser = new TextSiteParser();
+
+			parser.setTargetSiteList(websiteList);
+			parser.parseTextList();
+			Map<String, Map<String, String>> parsedTextMap = parser.getParsedTextMap();
+
+			for (Map.Entry<String, Map<String, String>> entry : parsedTextMap.entrySet()) {
+
+				System.out.println("--------------------------");
+				System.out.println(entry.getKey());
+
+				for (Map.Entry<String, String> text : entry.getValue().entrySet()) {
+
+					System.out.print(" - ");
+					System.out.println(text.getKey());
+
+				}
 
 			}
-
-		} else {
-			JOptionPane.showMessageDialog(null, "Fields mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
 		}
+	}
 
-		updateInfo();
+	private void setOptions() {
+
+		JComponent[] components = new JComponent[15];
+
+		JLabel labelMaxLinkPerYear = new JLabel("Колличество ссылок за год:");
+		JTextField textFieldMaxLinkPerYear = new JTextField();
+		textFieldMaxLinkPerYear.setToolTipText("Для Archive.org");
+		textFieldMaxLinkPerYear.setText(String.valueOf(PropertyHolder.getParseMaxLinkPerYear()));
+
+		JLabel labelStartYear = new JLabel("Год старта парсинга:");
+		JTextField textFieldStartYear = new JTextField();
+		textFieldStartYear.setToolTipText("Для Archive.org");
+		textFieldStartYear.setText(String.valueOf(PropertyHolder.getParseStartYear()));
+
+		JLabel labelSeparator = new JLabel("------------------------------------------------------------");
+
+		JLabel labelMinTextLength = new JLabel("Минимальный размер текста:");
+		JTextField textFieldMinTextLength = new JTextField();
+		textFieldMinTextLength.setToolTipText("Колличество символов в одном тексте.");
+		textFieldMinTextLength.setText(String.valueOf(PropertyHolder.getParseMinTextLength()));
+
+		JLabel labelUniqueValueWaiting = new JLabel("Время ожидания отклика:");
+		JTextField textFieldUniqueValueWaiting = new JTextField();
+		textFieldUniqueValueWaiting.setToolTipText("Значение в милисикундах. Для Text.ru");
+		textFieldUniqueValueWaiting.setText(String.valueOf(PropertyHolder.getParseUniqueValueWaiting()));
+
+		JLabel labelSeparator2 = new JLabel("------------------------------------------------------------");
+
+		JLabel labelTextRuLogin = new JLabel("Логин для Text.ru:");
+		JTextField textFieldTextRuLogin = new JTextField();
+		textFieldTextRuLogin.setText(String.valueOf(PropertyHolder.getParseTextRuLogin()));
+
+		JLabel labelTextRuPassword = new JLabel("Пароль для Text.ru:");
+		JTextField textFieldTextRuPassword = new JTextField();
+		textFieldTextRuPassword.setText(String.valueOf(PropertyHolder.getParseTextRuPassword()));
+
+		JLabel labelStatus = new JLabel("------------------------------------------------------------");
+
+		JButton buttonCheck = new JButton("Change");
+		buttonCheck.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				if (textFieldMaxLinkPerYear.getText() != String.valueOf(PropertyHolder.getParseMaxLinkPerYear())) {
+
+					// is field digit
+					if (textFieldMaxLinkPerYear.getText().matches("[-+]?\\d+")) {
+						PropertyHolder.setParseMaxLinkPerYear(textFieldMaxLinkPerYear.getText());
+
+					} else {
+						JOptionPane.showMessageDialog(null, "Field Max Link Per Year, mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
+						textFieldMaxLinkPerYear.setText(String.valueOf(PropertyHolder.getParseMaxLinkPerYear()));
+						textFieldMaxLinkPerYear.grabFocus();
+						return;
+					}
+
+				}
+
+				if (textFieldStartYear.getText() != String.valueOf(PropertyHolder.getParseStartYear())) {
+
+					// is field digit
+					if (textFieldStartYear.getText().matches("[-+]?\\d+")) {
+						PropertyHolder.setParseStarYear(textFieldStartYear.getText());
+
+					} else {
+						JOptionPane.showMessageDialog(null, "Field Start Year, mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
+						textFieldStartYear.setText(String.valueOf(PropertyHolder.getParseStartYear()));
+						textFieldStartYear.grabFocus();
+						return;
+					}
+
+				}
+
+				if (textFieldMinTextLength.getText() != String.valueOf(PropertyHolder.getParseMinTextLength())) {
+
+					// is field digit
+					if (textFieldMinTextLength.getText().matches("[-+]?\\d+")) {
+						PropertyHolder.setParseMinTextLength(textFieldMinTextLength.getText());
+
+					} else {
+						JOptionPane.showMessageDialog(null, "Field Minimum text length, mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
+						textFieldMinTextLength.setText(String.valueOf(PropertyHolder.getParseMinTextLength()));
+						textFieldMinTextLength.grabFocus();
+						return;
+					}
+
+				}
+
+				if (textFieldUniqueValueWaiting.getText() != String.valueOf(PropertyHolder.getParseUniqueValueWaiting())) {
+
+					// is field digit
+					if (textFieldUniqueValueWaiting.getText().matches("[-+]?\\d+")) {
+						PropertyHolder.setParseUniqueValueWaiting(textFieldUniqueValueWaiting.getText());
+
+					} else {
+						JOptionPane.showMessageDialog(null, "Field waiting time, mast be Numeric", "Error input type", JOptionPane.ERROR_MESSAGE);
+						textFieldUniqueValueWaiting.setText(String.valueOf(PropertyHolder.getParseUniqueValueWaiting()));
+						textFieldUniqueValueWaiting.grabFocus();
+						return;
+					}
+
+				}
+
+				PropertyHolder.setParseTextRuLogin(textFieldTextRuLogin.getText());
+				PropertyHolder.setParseTextRuPassword(textFieldTextRuPassword.getText());
+
+				labelStatus.setText("<html><font color='green'>Properties successfully changed!</font></html>");
+
+			}
+		});
+
+		components[0] = labelMaxLinkPerYear;
+		components[1] = textFieldMaxLinkPerYear;
+		components[2] = labelStartYear;
+		components[3] = textFieldStartYear;
+		components[4] = labelSeparator;
+		components[5] = labelMinTextLength;
+		components[6] = textFieldMinTextLength;
+		components[7] = labelUniqueValueWaiting;
+		components[8] = textFieldUniqueValueWaiting;
+		components[9] = labelSeparator2;
+		components[10] = labelTextRuLogin;
+		components[11] = textFieldTextRuLogin;
+		components[12] = labelTextRuPassword;
+		components[13] = textFieldTextRuPassword;
+		components[14] = labelStatus;
+
+		JOptionPane.showOptionDialog(null, components, "Change properties?", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new Object[] { buttonCheck }, null);
 
 	}
 
@@ -317,15 +467,23 @@ public class MainMenuController {
 		}
 	}
 
-	private class setParseConfigButtonActionListener implements ActionListener {
+	private class parseTextButtonActionListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-
-			setParseConfig();
+			parseText();
 
 		}
 
 	}
 
+	private class optionButtonActionListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setOptions();
+
+		}
+
+	}
 }

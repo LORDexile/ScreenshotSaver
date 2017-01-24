@@ -13,9 +13,11 @@ public class PropertyHolder {
 	private static String pathDriver;
 	private static String pathExportFolder;
 	private static String parseMaxLinkPerYear;
-	private static String parseStarYear;
-	private static String parseMinTextLenghts;
+	private static String parseStartYear;
+	private static String parseMinTextLength;
 	private static String parseUniqueValueWaiting;
+	private static String parseTextRuLogin;
+	private static String parseTextRuPassword;
 
 	public PropertyHolder() {
 		updateData();
@@ -29,9 +31,11 @@ public class PropertyHolder {
 		pathDriver = properties.getProperty(PropertyConstants.PATH_DRIVER);
 		pathExportFolder = properties.getProperty(PropertyConstants.PATH_EXPORT_FOLDER);
 		parseMaxLinkPerYear = properties.getProperty(PropertyConstants.PARSE_MAX_LINK_PER_YEAR);
-		parseStarYear = properties.getProperty(PropertyConstants.PARSE_START_YEAR);
-		parseMinTextLenghts = properties.getProperty(PropertyConstants.PARSE_MIN_TEXT_LENGHTS);
+		parseStartYear = properties.getProperty(PropertyConstants.PARSE_START_YEAR);
+		parseMinTextLength = properties.getProperty(PropertyConstants.PARSE_MIN_TEXT_LENGTH);
 		parseUniqueValueWaiting = properties.getProperty(PropertyConstants.PARSE_UNIQUE_VALUE_WAITING);
+		parseTextRuLogin = properties.getProperty(PropertyConstants.PARSE_TEXT_RU_LOGIN);
+		parseTextRuPassword = properties.getProperty(PropertyConstants.PARSE_TEXT_RU_PASSWORD);
 
 		// write property to System
 		System.setProperty("webdriver.gecko.driver", pathDriver);
@@ -73,14 +77,26 @@ public class PropertyHolder {
 		updateData();
 	}
 
-	public static void setParseMinTextLenghts(String parseMinTextLenghts) {
-		PropertyHolder.setProperty(PropertyConstants.PARSE_MIN_TEXT_LENGHTS, parseMinTextLenghts);
+	public static void setParseMinTextLength(String parseMinTextLenghts) {
+		PropertyHolder.setProperty(PropertyConstants.PARSE_MIN_TEXT_LENGTH, parseMinTextLenghts);
 
 		updateData();
 	}
 
 	public static void setParseUniqueValueWaiting(String parseUniqueValueWaiting) {
 		PropertyHolder.setProperty(PropertyConstants.PARSE_UNIQUE_VALUE_WAITING, parseUniqueValueWaiting);
+
+		updateData();
+	}
+
+	public static void setParseTextRuLogin(String parseTextRuLogin) {
+		PropertyHolder.setProperty(PropertyConstants.PARSE_TEXT_RU_LOGIN, parseTextRuLogin);
+
+		updateData();
+	}
+
+	public static void setParseTextRuPassword(String parseTextRuPassword) {
+		PropertyHolder.setProperty(PropertyConstants.PARSE_TEXT_RU_PASSWORD, parseTextRuPassword);
 
 		updateData();
 	}
@@ -97,16 +113,24 @@ public class PropertyHolder {
 		return Integer.parseInt(parseMaxLinkPerYear);
 	}
 
-	public static int getParseStarYear() {
-		return Integer.parseInt(parseStarYear);
+	public static int getParseStartYear() {
+		return Integer.parseInt(parseStartYear);
 	}
 
-	public static int getParseMinTextLenghts() {
-		return Integer.parseInt(parseMinTextLenghts);
+	public static int getParseMinTextLength() {
+		return Integer.parseInt(parseMinTextLength);
 	}
 
 	public static int getParseUniqueValueWaiting() {
 		return Integer.parseInt(parseUniqueValueWaiting);
+	}
+
+	public static String getParseTextRuLogin() {
+		return parseTextRuLogin;
+	}
+
+	public static String getParseTextRuPassword() {
+		return parseTextRuPassword;
 	}
 
 	public static PropertyHolder getInstance() {

@@ -9,6 +9,12 @@ public class Application {
 		MainMenuController controller = new MainMenuController();
 		controller.showManeMenu();
 
+		// TextParserController controller2 = new TextParserController();
+		// controller2.showTextParserFrame();
+
+		// TesterClass testerClass = new TesterClass();
+		// testerClass.start();
+
 	}
 
 }

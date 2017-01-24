@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 import interfaces.SiteParser;
 import interfaces.SiteParserExtend;
 import resources.Constants;
+import resources.PropertyHolder;
 
 public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
@@ -23,7 +24,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 	private String lastYearPrefix = "https://web.archive.org/web/*/";
 	private String targetYearPrefix = "https://web.archive.org/web/";
 	private String targetYearPostfix = "0101000000*/";
-	private int starYear;
+	private int startYear;
 
 	private int maxLinkPerYear = 12;
 	private boolean monthGroup1 = true, monthGroup2 = true, monthGroup3 = true, monthGroup4 = true;
@@ -38,8 +39,8 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 		PropetiesWorker propetiesWorker = new PropetiesWorker();
 		Properties properties = propetiesWorker.readProperties(Constants.CONFIG_PATH);
 
-		starYear = Integer.parseInt(properties.getProperty("parse.starYear"));
-		maxLinkPerYear = Integer.parseInt(properties.getProperty("parse.maxLinkPerYear"));
+		startYear = PropertyHolder.getParseStartYear();// Integer.parseInt(properties.getProperty("parse.startYear"));
+		maxLinkPerYear = PropertyHolder.getParseMaxLinkPerYear();// Integer.parseInt(properties.getProperty("parse.maxLinkPerYear"));
 	}
 
 	/**
@@ -53,7 +54,7 @@ public class ArchiveOrgSiteParser implements SiteParser, SiteParserExtend {
 
 		System.out.println("Start parsing " + targetSite + "... [Option = All YEARS{2006 - " + currentYear + "}]");
 
-		for (int i = starYear; i <= currentYear; i++) {
+		for (int i = startYear; i <= currentYear; i++) {
 			parse(i);
 		}
 

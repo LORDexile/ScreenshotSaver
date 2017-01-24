@@ -33,16 +33,14 @@ public class MainMenuFrame extends JFrame {
 	private JLabel websitesLabel;
 	private JLabel nodesLabel;
 
-	private JTextField maxLinksTextField;
-	private JButton setParseConfigButton;
-	private JTextField startYearTextField;
-	private JLabel labelStartYear;
+	private JButton parseTextButton;
+
+	private JButton optionsButton;
 
 	/**
 	 * Create the application.
 	 */
 	public MainMenuFrame() {
-		setResizable(false);
 		initialize();
 	}
 
@@ -52,7 +50,7 @@ public class MainMenuFrame extends JFrame {
 	private void initialize() {
 
 		setTitle(Constants.PROGRAM_TITLE);
-		setBounds(100, 100, 530, 340);
+		setBounds(100, 100, 538, 301);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		mainPanel = new JPanel();
@@ -102,7 +100,7 @@ public class MainMenuFrame extends JFrame {
 		mainPanel.add(exportFolderPathButton);
 
 		loadSiteListButton = new JButton("Load site list");
-		loadSiteListButton.setBounds(406, 221, 112, 20);
+		loadSiteListButton.setBounds(406, 138, 112, 20);
 		mainPanel.add(loadSiteListButton);
 
 		parseButton = new JButton("Start Prase");
@@ -111,55 +109,41 @@ public class MainMenuFrame extends JFrame {
 			}
 		});
 		parseButton.setEnabled(false);
-		parseButton.setBounds(406, 253, 111, 20);
+		parseButton.setBounds(406, 203, 111, 20);
 		mainPanel.add(parseButton);
 
 		screenshotsSaveButton = new JButton("Start Saving");
 		screenshotsSaveButton.setEnabled(false);
-		screenshotsSaveButton.setBounds(406, 285, 112, 20);
+		screenshotsSaveButton.setBounds(406, 235, 112, 20);
 		mainPanel.add(screenshotsSaveButton);
 
 		loadingLabel = new JLabel("Loading:");
-		loadingLabel.setBounds(10, 224, 354, 14);
+		loadingLabel.setBounds(10, 174, 354, 14);
 		mainPanel.add(loadingLabel);
 
 		JLabel labelWebsites = new JLabel("Websites:");
-		labelWebsites.setBounds(10, 256, 70, 14);
+		labelWebsites.setBounds(10, 206, 70, 14);
 		mainPanel.add(labelWebsites);
 
 		websitesLabel = new JLabel("0");
-		websitesLabel.setBounds(90, 256, 286, 14);
+		websitesLabel.setBounds(90, 206, 286, 14);
 		mainPanel.add(websitesLabel);
 
 		JLabel labelNodes = new JLabel("Nodes:");
-		labelNodes.setBounds(10, 288, 46, 14);
+		labelNodes.setBounds(10, 238, 46, 14);
 		mainPanel.add(labelNodes);
 
 		nodesLabel = new JLabel("0");
-		nodesLabel.setBounds(90, 288, 286, 14);
+		nodesLabel.setBounds(90, 238, 286, 14);
 		mainPanel.add(nodesLabel);
 
-		JLabel labelMaxLinks = new JLabel("Maximum  links per year(Archive.org*)");
-		labelMaxLinks.setBounds(10, 127, 230, 16);
-		mainPanel.add(labelMaxLinks);
+		parseTextButton = new JButton("Parse Text");
+		parseTextButton.setBounds(406, 167, 112, 28);
+		mainPanel.add(parseTextButton);
 
-		maxLinksTextField = new JTextField();
-		maxLinksTextField.setBounds(10, 147, 230, 20);
-		mainPanel.add(maxLinksTextField);
-		maxLinksTextField.setColumns(10);
-
-		setParseConfigButton = new JButton("Set");
-		setParseConfigButton.setBounds(406, 147, 112, 21);
-		mainPanel.add(setParseConfigButton);
-
-		startYearTextField = new JTextField();
-		startYearTextField.setBounds(252, 147, 142, 20);
-		mainPanel.add(startYearTextField);
-		startYearTextField.setColumns(10);
-
-		labelStartYear = new JLabel(" Strat year(Archive.org*)");
-		labelStartYear.setBounds(252, 127, 142, 16);
-		mainPanel.add(labelStartYear);
+		optionsButton = new JButton("Options");
+		optionsButton.setBounds(6, 138, 90, 28);
+		mainPanel.add(optionsButton);
 
 	}
 
@@ -211,16 +195,12 @@ public class MainMenuFrame extends JFrame {
 		return nodesLabel;
 	}
 
-	public JTextField getMaxLinksTextField() {
-		return maxLinksTextField;
+	public JButton getParseTextButton() {
+		return parseTextButton;
 	}
 
-	public JButton getSetParseConfigButton() {
-		return setParseConfigButton;
-	}
-
-	public JTextField getStartYearTextField() {
-		return startYearTextField;
+	public JButton getOptionsButton() {
+		return optionsButton;
 	}
 
 }
